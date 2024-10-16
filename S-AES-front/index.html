@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S-DES</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="header">
+        <img src="image/logo.png" alt="Logo" class="logo">
+        <h1 class="site-name">S-DES</h1>
+    </div>
+    <!-- 功能选项 -->
+    <div class="tab-container">
+        <button onclick="showTab('intro')">介绍</button>
+        <button onclick="showTab('bit8')">16bit 加解密</button>
+        <button onclick="showTab('ascii')">ASCII 加解密</button>
+        <button onclick="showTab('file')">文件加解密</button>
+        <button onclick="showTab('bruteforce')">中间相遇攻击</button>
+    </div>
+
+    <!-- 介绍内容 -->
+    <div id="intro" class="tab-content active">
+        <h2>介绍</h2>
+        <p>S-AES是一种简化版的AES(高级加密标准)加密算法。它主要对16位的二进制数据进行加密处理,而标准的AES算法则处理128位(16字节)的数据。</p>
+        <P>S-AES的设计目的是为了在教学和学习中简化AES算法的复杂性,同时保持其核心的加密原理和结构。</P>
+        <p>我们提供了16bit加解密、ASCII字符串加解密、文件加解密以及中间相遇攻击等功能</p>
+        <h3>S-AES算法流程</h3>
+        <h4>加/解密</h4>
+        <p><img src="image/endecode.png" alt="S-DES加密流程" width="65%" height="auto"></p>
+        <h3>S-AES变换</h3>
+        <p><img src="image/S-AES变换.png" alt="S-DES加密流程" width="60%" height="auto"></p>
+        <h3>密钥扩展</h3>
+        <p><img src="image/密钥扩展.png" alt="密钥扩展" width="60%" height="auto"></p>
+        <h3>CBC工作模式加密</h3>
+        <p><img src="image/CBCen.png" alt="CBC工作模式加密" width="60%" height="auto"></p>
+        <h3>CBC工作模式解密</h3>
+        <p><img src="image/CBCde.png" alt="CBC工作模式解密" width="60%" height="auto"></p>
+    </div>
+
+<!-- 16bit加解密内容 -->
+<div id="bit8" class="tab-content">
+    <h2>16bit 加解密</h2>
+    <div class="inner-content">
+        <div>
+            <button class="button" onclick="showBit16Tab('encrypt')">加密</button>
+            <button class="button" onclick="showBit16Tab('decrypt')">解密</button>
+        </div>
+
+        <!-- 加密界面 -->
+        <div id="bit16-encrypt" class="bit16-content active">
+
+            <br>
+            <!-- 加密算法选择 -->
+            <div>
+                <input type="radio" id="saes" name="encryptionType" value="SAES" onchange="updateKeyInput('encrypt')" checked>
+                <label for="saes">S-AES</label>
+                <input type="radio" id="2aes" name="encryptionType" value="2AES" onchange="updateKeyInput('encrypt')">
+                <label for="2aes">2-AES</label>
+                <input type="radio" id="3aes" name="encryptionType" value="3AES" onchange="updateKeyInput('encrypt')">
+                <label for="3aes">3-AES</label>
+            </div>
+
+            <p>请输入16位二进制明文</p>
+            <input type="text" id="bit16-plaintext" placeholder="如:1011010010110100" maxlength="16" pattern="^[01]+$" title="只能输入0和1" oninput="this.value = this.value.replace(/[^01]/g, '');">
+            
+            <p id="encrypt-key-label">请输入16位二进制密钥</p>
+            <input type="text" id="bit16-key" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1" oninput="this.value = this.value.replace(/[^01]/g, '');">
+            
+            <div class="buttons">
+                <button class="button" onclick="encrypt16Bit(); updateResultText('encrypt')">确认</button>
+                <button class="button" onclick="resetInputs()">重置</button>
+            </div>
+            <div class="result-box2" id="bit16-result">
+                此处显示加密结果
+            </div>
+        </div>
+
+        <!-- 解密界面 -->
+        <div id="bit16-decrypt" class="bit16-content">
+
+            <br>
+            <!-- 解密算法选择 -->
+            <div>
+                <input type="radio" id="saes-decrypt" name="decryptionType" value="SAES" onchange="updateKeyInput('decrypt')" checked>
+                <label for="saes-decrypt">S-AES</label>
+                <input type="radio" id="2aes-decrypt" name="decryptionType" value="2AES" onchange="updateKeyInput('decrypt')">
+                <label for="2aes-decrypt">2-AES</label>
+                <input type="radio" id="3aes-decrypt" name="decryptionType" value="3AES" onchange="updateKeyInput('decrypt')">
+                <label for="3aes-decrypt">3-AES</label>
+            </div>
+           
+            <p>请输入16位二进制密文</p>
+            <input type="text" id="bit16-ciphertext" placeholder="如:1011010010110100" maxlength="16" pattern="^[01]+$" title="只能输入0和1" oninput="this.value = this.value.replace(/[^01]/g, '');">
+            
+            <p id="decrypt-key-label">请输入16位二进制密钥</p>
+            <input type="text" id="bit16-key-decrypt" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1" oninput="this.value = this.value.replace(/[^01]/g, '');">
+            
+            <div class="buttons">
+                <button class="button" onclick="decrypt16Bit(); updateResultText('decrypt')">确认</button>
+                <button class="button" onclick="resetInputs()">重置</button>
+            </div>
+            <div class="result-box2" id="bit16-result-decrypt">
+                此处显示解密结果
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- ASCII加解密内容 -->
+<div id="ascii" class="tab-content">
+    <h2>ASCII 加解密</h2>
+    <div class="inner-content">
+        <div>
+            <button class="button" onclick="showASCIITab('encrypt')">加密</button>
+            <button class="button" onclick="showASCIITab('decrypt')">解密</button>
+        </div>
+        <!-- 加密界面 -->
+        <div id="ascii-encrypt" class="ascii-content active">
+
+            <br>
+            <!-- 加入单选按钮 -->
+            <div>
+                <input type="radio" id="normal" name="encryptionMode" value="Normal" checked onclick="updateASCIIResultText('encrypt')">
+                <label for="normal">Normal</label>
+                <input type="radio" id="cbc" name="encryptionMode" value="CBC" onclick="updateASCIIResultText('encrypt')">
+                <label for="cbc">CBC</label>
+            </div>
+
+            <p>请输入字符串明文</p>
+            <input type="text" id="ascii-plaintext" placeholder="请输入明文内容">
+            <p>请输入16位二进制密钥</p>
+            <input type="text" id="ascii-key" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">        
+                      
+            <div class="buttons">
+                <button class="button" onclick="encryptASCII()">确认</button>
+                <button class="button" onclick="resetASCIIInputs()">重置</button>
+            </div>
+            <div class="result-box2" id="ascii-result-encrypt">
+                此处显示加密结果
+            </div>
+        </div>
+        <!-- 解密界面 -->
+        <div id="ascii-decrypt" class="ascii-content">
+
+            <br>
+            <!-- 加入单选按钮 -->
+            <div>
+                <input type="radio" id="normal-decrypt" name="decryptionMode" value="Normal" checked onclick="updateASCIIResultText('decrypt')">
+                <label for="normal-decrypt">Normal</label>
+                <input type="radio" id="cbc-decrypt" name="decryptionMode" value="CBC" onclick="updateASCIIResultText('decrypt')">
+                <label for="cbc-decrypt">CBC</label>
+            </div>
+
+            <p>请输入字符串密文</p>
+            <input type="text" id="ascii-ciphertext" placeholder="请输入密文内容">
+            <p>请输入16位二进制密钥</p>
+            <input type="text" id="ascii-key-decrypt" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">
+            
+            
+            <div class="buttons">
+                <button class="button" onclick="decryptASCII()">确认</button>
+                <button class="button" onclick="resetInputs()">重置</button>
+            </div>
+            <div class="result-box2" id="ascii-result-decrypt">
+                此处显示解密结果
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- 文件加解密内容 -->
+    <div id="file" class="tab-content">
+        <h2>文件加解密</h2>
+        <div class="inner-content">
+        <div>
+            <button class="button" onclick="showFileTab('encrypt')">加密</button>
+            <button class="button" onclick="showFileTab('decrypt')">解密</button>
+        </div>
+      
+        <!-- 加密界面 -->
+        <div id="file-encrypt" class="file-content active">
+            <p>请选择需要加密的文件</p>
+            <input type="file" id="file-input-encrypt" style="display: none;">
+            <button id="custom-file-input-encrypt">选择文件</button>
+            <p>请输入16位二进制密钥</p>
+            <input type="text" id="file-key" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">        
+            <div class="buttons">
+                <button class="button" onclick="encryptFile()">确认</button>
+                <button class="button" onclick="resetFileInputs()">重置</button>
+            </div>
+            <div class="result-box3" id="file-result-encrypt">
+                此处显示加密结果
+            </div>
+        </div>
+        <!-- 解密界面 -->
+        <div id="file-decrypt" class="file-content">
+            <p>请选择需要解密的文件</p>
+            <input type="file" id="file-input-decrypt" style="display: none;">
+            <button id="custom-file-input-decrypt">选择文件</button>
+            <p>请输入16位二进制密钥</p>
+            <input type="text" id="file-key-decrypt" placeholder="如:0110110100101101" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">        
+            <div class="buttons">
+                <button class="button" onclick="decryptFile()">确认</button>
+                <button class="button" onclick="resetFileInputs()">重置</button>
+            </div>
+            <div class="result-box3" id="file-result-decrypt">
+                此处显示解密结果
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- 中间相遇攻击内容 -->
+    <div id="bruteforce" class="tab-content">
+        <h2>中间相遇攻击</h2>
+        <div class="inner-content">
+            <!-- 破解界面 -->
+            <div id="violent" class="violent-content active">
+                <p>请输入明文</p>
+                <input type="text" id="violent-plaintext" placeholder="请输入 16bit 明文内容" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">
+                <p>请输入密文</p>
+                <input type="text" id="violent-ciphertext" placeholder="请输入 16bit 密文内容" maxlength="16" pattern="^[01]+$" title="只能输入0和1"  oninput="this.value = this.value.replace(/[^01]/g, '');">
+                <div class="buttons">
+                    <button class="button" onclick="attack()">确认</button>
+                    <button class="button" onclick="resetInputs()">重置</button>
+                </div>
+                <div class="result-box4" id="violent-result-encrypt">
+                    此处显示中间相遇攻击破解的密钥
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>开发人员：</strong>陈露、罗丹</p>
+            <p><strong>联系方式：</strong><a href="mailto:1055331355@qq.com">1055331355@qq.com</a></p>
+            <p><strong>版权所有：</strong>&copy; 2024 重庆大学大数据与软件学院</p>
+        </div>
+    </footer>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
