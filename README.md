@@ -1,3 +1,5 @@
+<pre>
+<code class="tree">
 # S-DES项目结构
 
 │  README.md
@@ -26,3 +28,5 @@
     │
     └─styles	                                    - 前端页面的CSS样式定义
             style.css
+</code>
+</pre>
